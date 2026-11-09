@@ -24,8 +24,9 @@ export function readConfig(env: Record<string, string | undefined>) {
     .parse(env.WEB_URL ?? "http://localhost:5173")
     .replace(/\/$/, "");
   const emailTransport = z
-    .enum(["local", "resend"])
-    .parse(env.EMAIL_TRANSPORT ?? "local");
+    .enum(["disabled", "local", "resend"])
+    .parse(env.EMAIL_TRANSPORT ?? (production ? "disabled" : "local"));
+  const steamApiKey = env.STEAM_API_KEY?.trim() || undefined;
   const authSecret = env.BETTER_AUTH_SECRET ?? developmentSecret;
   if (emailTransport === "resend" && !env.RESEND_API_KEY)
     throw new Error("RESEND_API_KEY is required for Resend");
@@ -33,8 +34,14 @@ export function readConfig(env: Record<string, string | undefined>) {
     throw new Error("The local email inbox requires a local WEB_URL");
   if (production) {
     if (!env.DATABASE_URL) throw new Error("Production requires DATABASE_URL");
-    if (emailTransport !== "resend" || !env.EMAIL_FROM)
-      throw new Error("Production requires Resend and EMAIL_FROM");
+    if (!steamApiKey)
+      throw new Error("Production requires STEAM_API_KEY for Steam sign-in");
+    if (emailTransport === "local")
+      throw new Error("Local email delivery is not allowed in production");
+    if (emailTransport === "resend" && !env.EMAIL_FROM)
+      throw new Error(
+        "EMAIL_FROM is required when Resend is enabled in production",
+      );
     if (authSecret.length < 32 || authSecret === developmentSecret)
       throw new Error(
         "Production requires a private BETTER_AUTH_SECRET of at least 32 characters",
@@ -59,7 +66,7 @@ export function readConfig(env: Record<string, string | undefined>) {
     dataDir: resolve(env.DATA_DIR ?? resolve(root, ".data")),
     resendApiKey: env.RESEND_API_KEY,
     emailFrom: env.EMAIL_FROM ?? "Tito <hello@tito.localhost>",
-    steamApiKey: env.STEAM_API_KEY || undefined,
+    steamApiKey,
     openDotaApiKey: env.OPENDOTA_API_KEY || undefined,
     openaiApiKey: env.OPENAI_API_KEY || undefined,
     draftUserDailyLimit: z.coerce

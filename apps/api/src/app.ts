@@ -105,7 +105,7 @@ export function createApp(
             .object({
               steamEnabled: z.boolean(),
               localInboxEnabled: z.boolean(),
-              emailTransport: z.enum(["local", "resend"]),
+              emailTransport: z.enum(["disabled", "local", "resend"]),
             })
             .openapi("AppConfig"),
           "Public capabilities",
@@ -127,7 +127,7 @@ export function createApp(
   app.on(["GET", "POST"], "/api/auth/*", async (c) => {
     if (!config.steamApiKey && c.req.path.startsWith("/api/auth/steam/"))
       return c.json(
-        { error: "Steam sign-in is not configured yet. Use an email link." },
+        { error: "Steam sign-in is not available right now. Try again later." },
         503,
       );
     return auth.handler(c.req.raw);

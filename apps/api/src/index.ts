@@ -1,13 +1,12 @@
 import { readConfig } from "./config";
 import { createDatabase } from "./db";
-import { createMailer } from "./email";
 import { createAuth } from "./auth";
 import { createApp } from "./app";
 
 const config = readConfig(process.env);
 // Development and production entry-point scripts apply migrations before launching this server.
 const database = await createDatabase(config);
-const auth = createAuth(config, database.db, createMailer(config));
+const auth = createAuth(config, database.db);
 const server = Bun.serve({
   hostname: config.production ? "0.0.0.0" : "127.0.0.1",
   port: config.port,

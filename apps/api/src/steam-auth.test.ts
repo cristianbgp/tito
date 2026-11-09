@@ -14,7 +14,7 @@ import {
 import { createTestDatabase } from "./db/test-database";
 import { readConfig } from "./config";
 import { createAuth } from "./auth";
-import { createMailer, listLocalEmails } from "./email";
+import { existingTestSession } from "./test-utils/session";
 
 const steamEndpoint = "https://steamcommunity.com/openid/login";
 const namespace = "http://specs.openid.net/auth/2.0";
@@ -39,7 +39,7 @@ describe("Steam authentication with Better Auth", () => {
       STEAM_API_KEY: "test-key",
     });
     database = await createTestDatabase(dataDir);
-    auth = createAuth(config, database.db, createMailer(config));
+    auth = createAuth(config, database.db);
   });
   afterAll(async () => {
     await database?.close();
@@ -153,6 +153,14 @@ describe("Steam authentication with Better Auth", () => {
       headers: new Headers({ Cookie: cookieHeader(response) }),
     });
     expect(session?.user).toMatchObject({ steamId, name: "Steam Player" });
+    const restored = createAuth(config, database.db);
+    expect(
+      (
+        await restored.api.getSession({
+          headers: new Headers({ Cookie: cookieHeader(response) }),
+        })
+      )?.user.id,
+    ).toBe(session?.user.id);
     const next = await complete(await begin(), steamId);
     const returning = await auth.api.getSession({
       headers: new Headers({ Cookie: cookieHeader(next) }),
@@ -160,33 +168,14 @@ describe("Steam authentication with Better Auth", () => {
     expect(returning?.user.id).toBe(session?.user.id);
   });
 
-  async function signInWithEmail(email: string) {
-    const requested = await auth.handler(
-      new Request(`${config.webUrl}/api/auth/sign-in/magic-link`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Origin: config.webUrl },
-        body: JSON.stringify({ email, callbackURL: "/account" }),
-      }),
-    );
-    expect(requested.status).toBe(200);
-    const message = (await listLocalEmails(dataDir)).find(
-      (mail) => mail.to === email,
-    )!;
-    const verifyURL = message.html
-      .match(/href="([^"]*magic-link\/verify[^"]*)"/)![1]
-      .replaceAll("&amp;", "&");
-    const verified = await auth.handler(new Request(verifyURL));
-    const emailCookie = cookieHeader(verified);
-    const original = await auth.api.getSession({
-      headers: new Headers({ Cookie: emailCookie }),
-    });
-    expect(original?.user.email).toBe(email);
-    return { emailCookie, original: original! };
+  async function existingEmailAccount(email: string) {
+    const { cookie, original } = await existingTestSession(auth, email);
+    return { emailCookie: cookie, original };
   }
 
-  it("links Steam to the signed-in email account and preserves that owner on login", async () => {
+  it("links Steam to an existing account and preserves that owner on login", async () => {
     const email = "steam-link@example.com";
-    const { emailCookie, original } = await signInWithEmail(email);
+    const { emailCookie, original } = await existingEmailAccount(email);
     const steamId = "76561198030654386";
     const response = await complete(await begin("link", emailCookie), steamId);
     expect(response.status).toBe(302);
@@ -223,7 +212,7 @@ describe("Steam authentication with Better Auth", () => {
       headers: new Headers({ Cookie: cookieHeader(ownerResponse) }),
     });
     expect(owner?.user.steamId).toBe(steamId);
-    const { emailCookie, original } = await signInWithEmail(
+    const { emailCookie, original } = await existingEmailAccount(
       "other-owner@example.com",
     );
     const response = await complete(await begin("link", emailCookie), steamId);

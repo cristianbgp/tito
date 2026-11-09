@@ -14,8 +14,8 @@ const spanish: Readonly<Record<string, string>> = {
   "Something went wrong. Please try again.":
     "Algo salió mal. Inténtalo de nuevo.",
   "Not found.": "No se encontró.",
-  "Steam sign-in is not configured yet. Use an email link.":
-    "El inicio de sesión con Steam aún no está configurado. Usa un enlace por correo.",
+  "Steam sign-in is not available right now. Try again later.":
+    "El acceso con Steam no está disponible en este momento. Vuelve a intentarlo más tarde.",
   "Sign in to request hero suggestions.":
     "Inicia sesión para solicitar sugerencias de héroes.",
   "Reload Tito and try suggesting heroes again.":

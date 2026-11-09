@@ -9,6 +9,7 @@ export type AppConfigEmailTransport = typeof AppConfigEmailTransport[keyof typeo
 
 
 export const AppConfigEmailTransport = {
+  disabled: 'disabled',
   local: 'local',
   resend: 'resend',
 } as const;

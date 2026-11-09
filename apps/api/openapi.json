@@ -18,6 +18,7 @@
           "emailTransport": {
             "type": "string",
             "enum": [
+              "disabled",
               "local",
               "resend"
             ]

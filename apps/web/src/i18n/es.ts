@@ -88,7 +88,7 @@ export const es = {
       "La evolución del oro no está disponible. Abre la partida para solicitar el análisis de la repetición.",
     accountTitle: "Hazlo tuyo.",
     accountText:
-      "Crea tu cuenta para reunir tu identidad y preferencias. Conecta Steam cuando quieras.",
+      "Inicia sesión con Steam para reunir tus partidas, preferencias y progreso.",
     noteTitle: "Una base para jugar mejor Dota",
     noteText:
       "Explora tus partidas, sigue tu progreso y solicita una revisión con IA cuando las revisiones estén habilitadas.",
@@ -234,26 +234,19 @@ export const es = {
     eyebrow: "UNA CUENTA. TU CAMINO EN DOTA.",
     title: "Bienvenido a Tito.",
     description:
-      "Crea una cuenta o continúa donde te quedaste. Te enviaremos un enlace de acceso por correo.",
-    email: "Correo electrónico",
-    placeholder: "tu@ejemplo.com",
-    send: "Enviar enlace de acceso",
-    sending: "Enviando tu enlace…",
-    sentTitle: "Tu enlace está en camino.",
-    sent: "Abre el enlace de acceso en tu correo. Vence en 10 minutos.",
-    localSent:
-      "Modo local: tu correo te espera en la bandeja local. No se envió nada al exterior.",
-    inbox: "Abrir bandeja local",
-    another: "Usar otro correo",
+      "Inicia sesión con Steam para conectar tu perfil de Dota y guardar tus partidas.",
+    steamHeading: "Tu jugador, conectado.",
+    steamHelp:
+      "Tu primer inicio de sesión con Steam crea tu cuenta de Tito y conecta tu perfil de jugador.",
+    connecting: "Conectando con Steam…",
     steam: "Continuar con Steam",
     steamLink: "Conectar Steam",
     steamUnavailable:
-      "El acceso con Steam aún no está disponible. Usa un enlace por correo para comenzar.",
-    or: "o",
+      "El acceso con Steam no está disponible temporalmente. Vuelve a intentarlo más tarde.",
     failure:
-      "No pudimos iniciar tu sesión. Solicita un enlace nuevo y vuelve a intentar.",
+      "No se completó el inicio de sesión con Steam. Vuelve a intentarlo.",
     footnote:
-      "Sin contraseñas que recordar. Tu primer inicio de sesión crea tu cuenta.",
+      "Steam gestiona el acceso. Tito nunca recibe tu contraseña de Steam.",
   },
   account: {
     loading: "Cargando tu cuenta…",

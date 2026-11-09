@@ -36,6 +36,8 @@ export function createMailer(config: Config, sender?: EmailSender) {
       : undefined;
   return {
     async sendSignIn(to: string, url: string, locale: Locale = "en") {
+      if (config.emailTransport === "disabled")
+        throw new Error("Email delivery is disabled");
       const emailCopy = emailCopyFor(locale);
       const template = createElement(SignInEmail, { url, locale });
       const [html, text] = await Promise.all([

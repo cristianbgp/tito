@@ -256,9 +256,10 @@ describe.skipIf(!baseUrl)("real PostgreSQL lifecycle", () => {
         WEB_URL: "https://tito.example.com",
         NODE_ENV: "production",
         BETTER_AUTH_SECRET: randomUUID() + randomUUID(),
-        EMAIL_TRANSPORT: "resend",
-        RESEND_API_KEY: "re_test_no_email_sent",
-        EMAIL_FROM: "Tito <coach@example.com>",
+        EMAIL_TRANSPORT: "disabled",
+        RESEND_API_KEY: "",
+        EMAIL_FROM: "",
+        STEAM_API_KEY: "steam-test-key",
       },
       stdio: ["ignore", "pipe", "pipe"],
     });
@@ -286,6 +287,24 @@ describe.skipIf(!baseUrl)("real PostgreSQL lifecycle", () => {
       );
       const inbox = await fetch(`http://127.0.0.1:${port}/api/dev/emails`);
       expect(inbox.status).toBe(404);
+      const capabilities = await fetch(`http://127.0.0.1:${port}/api/config`);
+      expect(await capabilities.json()).toMatchObject({
+        steamEnabled: true,
+        emailTransport: "disabled",
+        localInboxEnabled: false,
+      });
+      const emailLogin = await fetch(
+        `http://127.0.0.1:${port}/api/auth/sign-in/magic-link`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Origin: "https://tito.example.com",
+          },
+          body: JSON.stringify({ email: "player@example.com" }),
+        },
+      );
+      expect(emailLogin.status).toBe(404);
     } finally {
       if (child.pid) {
         try {

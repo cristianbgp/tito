@@ -77,11 +77,36 @@ describe("application configuration", () => {
       EMAIL_TRANSPORT: "resend",
       RESEND_API_KEY: "re_test",
       EMAIL_FROM: "Tito <coach@example.com>",
+      STEAM_API_KEY: "steam-test-key",
     };
     expect(readConfig(env).production).toBe(true);
     expect(() => readConfig({ ...env, EMAIL_TRANSPORT: "local" })).toThrow();
     expect(() =>
       readConfig({ ...env, BETTER_AUTH_SECRET: readConfig({}).authSecret }),
     ).toThrow();
+  });
+
+  it("starts Steam-only production without any email provider and requires a Steam key", () => {
+    const env = {
+      NODE_ENV: "production",
+      WEB_URL: "https://tito.example.com",
+      DATABASE_URL: "postgres://user:password@localhost/tito",
+      BETTER_AUTH_SECRET: "production-secret-with-at-least-32-characters",
+      STEAM_API_KEY: "steam-test-key",
+    };
+    expect(readConfig(env)).toMatchObject({
+      production: true,
+      emailTransport: "disabled",
+      steamApiKey: "steam-test-key",
+    });
+    expect(
+      readConfig({ ...env, EMAIL_TRANSPORT: "disabled" }).emailTransport,
+    ).toBe("disabled");
+    expect(() => readConfig({ ...env, STEAM_API_KEY: "" })).toThrow(
+      /STEAM_API_KEY/,
+    );
+    expect(() => readConfig({ ...env, EMAIL_TRANSPORT: "local" })).toThrow(
+      /local/i,
+    );
   });
 });

@@ -6,6 +6,23 @@ import { createMailer, listLocalEmails } from "./email";
 import { readConfig } from "./config";
 
 describe("email delivery", () => {
+  it("does not write local mail when delivery is disabled", async () => {
+    const dataDir = await mkdtemp(join(tmpdir(), "tito-mail-disabled-"));
+    try {
+      const mailer = createMailer(
+        readConfig({ DATA_DIR: dataDir, EMAIL_TRANSPORT: "disabled" }),
+      );
+      await expect(
+        mailer.sendSignIn(
+          "player@example.com",
+          "https://tito.example.com/login",
+        ),
+      ).rejects.toThrow(/disabled/i);
+      expect(await listLocalEmails(dataDir)).toEqual([]);
+    } finally {
+      await rm(dataDir, { recursive: true, force: true });
+    }
+  });
   it("stores the rendered email locally without contacting Resend", async () => {
     const dataDir = await mkdtemp(join(tmpdir(), "tito-mail-"));
     try {

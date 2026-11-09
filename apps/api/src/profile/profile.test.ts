@@ -5,7 +5,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createTestDatabase } from "../db/test-database";
 import { readConfig } from "../config";
 import { createAuth } from "../auth";
-import { createMailer, listLocalEmails } from "../email";
+import { existingTestSession } from "../test-utils/session";
 import { createApp } from "../app";
 import { resolveProfile } from "./service";
 
@@ -20,36 +20,13 @@ describe("saved player preferences", () => {
     dataDir = await mkdtemp(join(tmpdir(), "tito-profile-"));
     const config = readConfig({ DATA_DIR: dataDir });
     database = await createTestDatabase(dataDir);
-    const auth = createAuth(config, database.db, createMailer(config));
+    const auth = createAuth(config, database.db);
     app = createApp(config, auth, undefined, database.db);
-    async function signIn(email: string) {
-      const requested = await auth.handler(
-        new Request(`${config.webUrl}/api/auth/sign-in/magic-link`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Origin: config.webUrl,
-          },
-          body: JSON.stringify({
-            email,
-            name: "Profile Player",
-            callbackURL: `${config.webUrl}/account`,
-          }),
-        }),
-      );
-      expect(requested.status).toBe(200);
-      const message = (await listLocalEmails(dataDir)).find(
-        (mail) => mail.to === email,
-      )!;
-      const url = message.html
-        .match(/href="([^"]*magic-link\/verify[^"]*)"/)![1]
-        .replaceAll("&amp;", "&");
-      const response = await auth.handler(new Request(url));
-      expect(response.status).toBe(302);
-      return response.headers.get("set-cookie")!;
+    async function existingSession(email: string) {
+      return (await existingTestSession(auth, email)).cookie;
     }
-    firstCookie = await signIn("first@example.com");
-    secondCookie = await signIn("second@example.com");
+    firstCookie = await existingSession("first@example.com");
+    secondCookie = await existingSession("second@example.com");
   });
 
   afterAll(async () => {

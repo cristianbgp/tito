@@ -88,7 +88,7 @@ export const en = {
       "Gold timeline is unavailable. Open the match to request replay analysis.",
     accountTitle: "Make it your own.",
     accountText:
-      "Create your account to keep your identity and preferences together. Connect Steam when you’re ready.",
+      "Sign in with Steam to keep your matches, preferences and progress together.",
     noteTitle: "A foundation for better Dota",
     noteText:
       "Explore your matches, follow your progress, and request an AI review when reviews are enabled.",
@@ -230,25 +230,18 @@ export const en = {
     eyebrow: "ONE ACCOUNT. YOUR DOTA JOURNEY.",
     title: "Welcome to Tito.",
     description:
-      "Create an account or pick up where you left off. We’ll email you a sign-in link.",
-    email: "Email address",
-    placeholder: "you@example.com",
-    send: "Send sign-in link",
-    sending: "Sending your link…",
-    sentTitle: "Your link is on its way.",
-    sent: "Open the sign-in link in your email. It expires in 10 minutes.",
-    localSent:
-      "Local mode: your email is waiting in the local inbox. Nothing was sent externally.",
-    inbox: "Open local inbox",
-    another: "Use another email",
+      "Sign in with Steam to connect your Dota profile and keep your matches together.",
+    steamHeading: "Your player, connected.",
+    steamHelp:
+      "Your first Steam sign-in creates your Tito account and connects your player profile.",
+    connecting: "Connecting to Steam…",
     steam: "Continue with Steam",
     steamLink: "Connect Steam",
     steamUnavailable:
-      "Steam sign-in is not available yet. Use an email link to get started.",
-    or: "or",
-    failure: "We couldn’t sign you in. Request a fresh link and try again.",
+      "Steam sign-in is temporarily unavailable. Please try again later.",
+    failure: "Steam sign-in didn’t finish. Please try again.",
     footnote:
-      "No password to remember. Your first sign-in creates your account.",
+      "Steam handles your login. Tito never receives your Steam password.",
   },
   account: {
     loading: "Loading your account…",
