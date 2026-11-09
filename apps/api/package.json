@@ -1,0 +1,37 @@
+{
+  "name": "@tito/api",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run db:migrate && bun --watch src/index.ts",
+    "start": "NODE_ENV=production bun run db:migrate && NODE_ENV=production bun dist/index.js",
+    "build": "bun build src/index.ts --target bun --packages external --outdir dist",
+    "email:dev": "email dev --dir emails --port ${PORT:-3002}",
+    "openapi": "bun scripts/openapi.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "bun scripts/migrate.ts",
+    "db:studio": "drizzle-kit studio --host 127.0.0.1",
+    "test:postgres": "bun run build && bun scripts/test-postgres.ts"
+  },
+  "dependencies": {
+    "@better-auth/drizzle-adapter": "1.7.18",
+    "@hono/zod-openapi": "^1.6.3",
+    "react-email": "6.11.8",
+    "better-auth": "1.7.18",
+    "better-auth-steam": "0.2.3",
+    "drizzle-orm": "0.45.4",
+    "hono": "^4.13.17",
+    "postgres": "^4.1.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "resend": "^6.37.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.15",
+    "@react-email/ui": "^6.11.8",
+    "auth": "1.7.18",
+    "drizzle-kit": "^0.31.11"
+  }
+}

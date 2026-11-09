@@ -1,0 +1,1 @@
+export { intelligenceCopy } from "./index";

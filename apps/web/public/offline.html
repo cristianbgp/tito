@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Tito · Offline reference</title
+  ><style>
+    :root {
+      color-scheme: dark;
+      font:
+        16px -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background: #15171b;
+      color: #f6f6f8;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 0 0, #543b34, transparent 60%);
+    }
+    main {
+      max-width: 1000px;
+      margin: auto;
+      padding: 32px 22px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .language {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+    }
+    select {
+      font: inherit;
+      color: inherit;
+      background: #24262d;
+      border: 1px solid #666;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    header img {
+      width: 40px;
+      height: 40px;
+    }
+    h1 {
+      font-size: 36px;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+    p {
+      color: #b5b8c2;
+      line-height: 1.7;
+    }
+    a {
+      color: #eea08b;
+    }
+    input {
+      font: inherit;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 14px;
+      border: 1px solid #666;
+      border-radius: 12px;
+      background: #ffffff10;
+      color: inherit;
+      margin: 12px 0 24px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 14px;
+    }
+    article {
+      padding: 20px;
+      border: 1px solid #ffffff22;
+      border-radius: 18px;
+      background: #ffffff08;
+    }
+    h2 {
+      font-size: 17px;
+      margin: 0 0 8px;
+    }
+    small {
+      color: #b5b8c2;
+    }
+    button {
+      padding: 12px;
+      border: 0;
+      border-radius: 10px;
+      font: inherit;
+      background: #eea08b;
+      color: #241b16;
+    }
+    input:focus-visible,
+    select:focus-visible,
+    a:focus-visible,
+    button:focus-visible {
+      outline: 3px solid #eea08b;
+      outline-offset: 3px;
+    }
+  </style>
+  <main>
+    <header>
+      <img src="/brand/isotype-180.png" alt="" /><strong>tito</strong>
+      <div class="language">
+        <label for="language">Language</label>
+        <select id="language">
+          <option value="en" lang="en">English</option>
+          <option value="es" lang="es">Español</option>
+        </select>
+      </div>
+    </header>
+    <h1>Your public hero reference, offline.</h1>
+    <p id="help">
+      Match history, notes, accounts and AI need a connection. This view
+      contains only the public bundled hero catalog; its traits can lag game
+      updates.
+    </p>
+    <p><a href="/tools">Try Tito again</a></p>
+    <label for="search">Find a hero or catalog role</label
+    ><input id="search" type="search" placeholder="Search heroes…" />
+    <p id="count" role="status"></p>
+    <div class="grid" id="heroes"></div>
+  </main>
+  <script type="module">
+    const copy = {
+      en: {
+        title: "Tito · Offline reference",
+        language: "Language",
+        heading: "Your public hero reference, offline.",
+        help: "Match history, notes, accounts and AI need a connection. This view contains only the public bundled hero catalog; its traits can lag game updates.",
+        retry: "Try Tito again",
+        search: "Find a hero or catalog role",
+        placeholder: "Search heroes…",
+        loading: "Loading public references…",
+        empty: "No heroes match this search.",
+        error:
+          "Public references are not cached on this device yet. Connect to Tito and enable offline references first.",
+        count: (n) => `${n} ${n === 1 ? "hero" : "heroes"}`,
+        traits: {},
+      },
+      es: {
+        title: "Tito · Referencia sin conexión",
+        language: "Idioma",
+        heading: "Tu referencia pública de héroes, sin conexión.",
+        help: "El historial de partidas, las notas, las cuentas y la IA necesitan conexión. Esta vista solo contiene el catálogo público de héroes incluido; sus características pueden ir detrás de las actualizaciones del juego.",
+        retry: "Volver a intentar con Tito",
+        search: "Busca un héroe o rol del catálogo",
+        placeholder: "Buscar héroes…",
+        loading: "Cargando referencias públicas…",
+        empty: "Ningún héroe coincide con esta búsqueda.",
+        error:
+          "Las referencias públicas aún no están guardadas en este dispositivo. Conéctate a Tito y habilita primero las referencias sin conexión.",
+        count: (n) => `${n} ${n === 1 ? "héroe" : "héroes"}`,
+        traits: {
+          Melee: "Cuerpo a cuerpo",
+          Ranged: "A distancia",
+          Carry: "Carry",
+          Escape: "Escape",
+          Nuker: "Daño explosivo",
+          Initiator: "Iniciador",
+          Durable: "Resistente",
+          Disabler: "Incapacitador",
+          Support: "Apoyo",
+          Pusher: "Presión de líneas",
+        },
+      },
+    };
+    let locale = "en";
+    try {
+      if (localStorage.getItem("tito:locale") === "es") locale = "es";
+    } catch {
+      // A blocked preference store does not prevent offline reference use.
+    }
+    let heroes = [];
+    let state = "loading";
+    const grid = document.querySelector("#heroes"),
+      count = document.querySelector("#count"),
+      search = document.querySelector("#search"),
+      language = document.querySelector("#language");
+    const normalize = (value) =>
+      value
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    function trait(value) {
+      return copy[locale].traits[value] ?? value;
+    }
+    function render() {
+      const text = copy[locale];
+      document.documentElement.lang = locale;
+      document.title = text.title;
+      language.value = locale;
+      document.querySelector("label[for=language]").textContent = text.language;
+      document.querySelector("h1").textContent = text.heading;
+      document.querySelector("#help").textContent = text.help;
+      document.querySelector("a").textContent = text.retry;
+      document.querySelector("label[for=search]").textContent = text.search;
+      search.placeholder = text.placeholder;
+      if (state !== "ready") {
+        count.textContent = text[state];
+        grid.replaceChildren();
+        return;
+      }
+      const q = normalize(search.value);
+      const rows = heroes.filter((h) =>
+        normalize(
+          [h.name, ...h.roles, ...h.roles.map(trait)].join(" "),
+        ).includes(q),
+      );
+      grid.replaceChildren(
+        ...rows.map((h) => {
+          const card = document.createElement("article"),
+            title = document.createElement("h2"),
+            traits = document.createElement("small");
+          title.textContent = h.name;
+          traits.textContent = [h.attackType, ...h.roles]
+            .filter(Boolean)
+            .map(trait)
+            .join(" · ");
+          card.append(title, traits);
+          return card;
+        }),
+      );
+      count.textContent = rows.length ? text.count(rows.length) : text.empty;
+    }
+    search.addEventListener("input", render);
+    language.addEventListener("change", () => {
+      locale = language.value === "es" ? "es" : "en";
+      try {
+        localStorage.setItem("tito:locale", locale);
+      } catch {
+        // Keep the selected language for this view when storage is blocked.
+      }
+      render();
+    });
+    render();
+    try {
+      const data = await (await fetch("/reference-catalog.json")).json();
+      heroes = data.heroes;
+      state = "ready";
+    } catch {
+      state = "error";
+    }
+    render();
+  </script>
+</html>

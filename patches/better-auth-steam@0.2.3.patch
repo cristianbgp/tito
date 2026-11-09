@@ -1,0 +1,49 @@
+diff --git a/dist/index.js b/dist/index.js
+index 3c9f80296fc28f4c32aff64891a0545c94f09143..f83ffdf89a8e87b790b7aab9bd7b54ecc50b2a86 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -327,8 +327,8 @@ var steamOpenID = (options) => {
+             ctx.context.baseURL,
+             isTrustedRedirect
+           );
+-          const { state } = await generateState(ctx, void 0, {
+-            returnTo: callbackEndpoint
++          const { state } = await generateState(ctx, {
++            additionalData: { returnTo: callbackEndpoint }
+           });
+           const url = buildSteamAuthorizationURL(callbackEndpoint, realm, state);
+           ctx.setHeader("Location", url);
+@@ -378,14 +378,13 @@ var steamOpenID = (options) => {
+             ctx.context.baseURL,
+             isTrustedRedirect
+           );
+-          const { state } = await generateState(
+-            ctx,
+-            {
++          const { state } = await generateState(ctx, {
++            link: {
+               email: ctx.context.session.user.email,
+               userId: ctx.context.session.user.id
+             },
+-            { returnTo: callbackEndpoint }
+-          );
++            additionalData: { returnTo: callbackEndpoint }
++          });
+           const url = buildSteamAuthorizationURL(callbackEndpoint, realm, state);
+           ctx.setHeader("Location", url);
+           return ctx.json({
+@@ -532,10 +531,10 @@ var steamOpenID = (options) => {
+             }
+             let existingAccount;
+             try {
+-              existingAccount = await ctx.context.internalAdapter.findAccountByProviderId(
+-                steamId,
+-                PROVIDER_ID
+-              );
++              existingAccount = await ctx.context.internalAdapter.findAccountByKey({
++                accountId: steamId,
++                providerId: PROVIDER_ID
++              });
+             } catch (error) {
+               ctx.context.logger.error(
+                 "The plugin could not check the Steam account owner.",

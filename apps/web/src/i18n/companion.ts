@@ -1,0 +1,1 @@
+export { companionCopy } from "./index";

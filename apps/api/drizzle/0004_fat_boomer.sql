@@ -1,0 +1,1 @@
+ALTER TABLE "review_attempt" ADD COLUMN "user_budget_key" text;

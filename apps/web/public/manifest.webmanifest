@@ -1,0 +1,31 @@
+{
+  "id": "/",
+  "name": "Tito | Dota companion",
+  "short_name": "Tito",
+  "description": "Your matches, learning and draft tools together.",
+  "start_url": "/tools",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#15171b",
+  "theme_color": "#15171b",
+  "icons": [
+    {
+      "src": "/brand/isotype.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/isotype-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/isotype-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

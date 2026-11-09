@@ -1,0 +1,270 @@
+@import "tailwindcss";
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* shadcn's semantic utilities follow the existing appearance tokens. */
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-panel: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--surface-raised);
+  --color-accent: var(--selected);
+  --color-background: var(--canvas);
+  --color-foreground: var(--ink);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--ink);
+  --color-popover: var(--glass-solid);
+  --color-popover-foreground: var(--ink);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-ink);
+  --color-secondary: var(--surface-raised);
+  --color-secondary-foreground: var(--ink);
+  --color-muted-foreground: var(--muted);
+  --color-accent-foreground: var(--ink);
+  --color-destructive: var(--danger);
+  --color-border: var(--line);
+  --color-input: var(--line);
+  --color-ring: var(--accent);
+}
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, monospace;
+}
+:root {
+  color-scheme: dark;
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --canvas: #15171b;
+  --ink: #f6f6f8;
+  --muted: #b5b8c2;
+  --faint: #9ea3af;
+  --accent: #eea08b;
+  --accent-ink: #2c1b16;
+  --accent-start: #f0a48f;
+  --accent-end: #e28e79;
+  --line: rgb(255 255 255 / 0.14);
+  --line-bright: rgb(255 255 255 / 0.25);
+  --glass: rgb(255 255 255 / 0.055);
+  --glass-solid: #282a31;
+  --surface: rgb(32 34 39 / 0.78);
+  --surface-solid: #24262c;
+  --surface-raised: rgb(255 255 255 / 0.045);
+  --input: rgb(255 255 255 / 0.035);
+  --selected: rgb(222 145 120 / 0.18);
+  --selected-solid: #3b302e;
+  --table-head: #292b31;
+  --row-sticky: #24262c;
+  --success: #c1dc86;
+  --success-tint: rgb(174 208 105 / 0.11);
+  --danger: #ffa38d;
+  --danger-tint: rgb(255 136 108 / 0.1);
+  --gold: #edcd96;
+  --shadow:
+    0 18px 54px rgb(0 0 0 / 0.14), inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --ambient:
+    radial-gradient(ellipse at 4% 4%, rgb(144 83 65 / 0.4), transparent 40%),
+    radial-gradient(
+      ellipse at 95% 2%,
+      rgb(115 136 163 / 0.28),
+      transparent 38%
+    ),
+    radial-gradient(ellipse at 68% 98%, rgb(107 74 64 / 0.2), transparent 47%);
+  --ease-ui: cubic-bezier(0.2, 0.7, 0.3, 1);
+  background: var(--canvas);
+  color: var(--ink);
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --canvas: #f3f5fa;
+  --ink: #1a1d25;
+  --muted: #5c6270;
+  --faint: #666d7b;
+  --accent: #a74734;
+  --accent-ink: #301b15;
+  --accent-start: #ffd4c9;
+  --accent-end: #ffb8a7;
+  --line: rgb(43 49 65 / 0.12);
+  --line-bright: rgb(255 255 255 / 0.85);
+  --glass: rgb(255 255 255 / 0.48);
+  --glass-solid: #f4f5fa;
+  --surface: rgb(255 255 255 / 0.64);
+  --surface-solid: #fdfdff;
+  --surface-raised: rgb(255 255 255 / 0.5);
+  --input: rgb(255 255 255 / 0.48);
+  --selected: rgb(255 180 162 / 0.2);
+  --selected-solid: #ffede8;
+  --table-head: #edf0f6;
+  --row-sticky: #fafbfe;
+  --success: #23703b;
+  --success-tint: rgb(71 150 86 / 0.07);
+  --danger: #b83f32;
+  --danger-tint: rgb(215 71 49 / 0.07);
+  --gold: #876013;
+  --shadow:
+    0 18px 54px rgb(80 91 131 / 0.065), inset 0 1px 0 rgb(255 255 255 / 0.9);
+  --ambient:
+    radial-gradient(ellipse at 9% 0%, rgb(174 209 255 / 0.51), transparent 43%),
+    radial-gradient(
+      ellipse at 93% 2%,
+      rgb(255 208 200 / 0.52),
+      transparent 43%
+    ),
+    radial-gradient(
+      ellipse at 50% 95%,
+      rgb(206 216 252 / 0.25),
+      transparent 50%
+    );
+}
+button,
+.button {
+  touch-action: manipulation;
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .sidebar,
+  .toolbar-search,
+  .appearance-control,
+  .account-button {
+    background: var(--glass-solid);
+  }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  body {
+    background: var(--canvas);
+  }
+}
+@media (prefers-contrast: more) {
+  :root {
+    --line: #9196a3;
+    --muted: #e3e5ea;
+    --faint: #c8cdd8;
+  }
+  :root[data-theme="light"] {
+    --line: #737b8d;
+    --muted: #343b49;
+    --faint: #424c5e;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    min-width: 320px;
+    background: var(--ambient), var(--canvas);
+    background-attachment: fixed;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  button,
+  input,
+  select {
+    font: inherit;
+  }
+  button,
+  a,
+  input,
+  select {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: wait;
+    opacity: 0.58;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+  ::selection {
+    background: var(--selected-solid);
+    color: var(--ink);
+  }
+  button svg,
+  a svg {
+    flex-shrink: 0;
+  }
+  h1 {
+    white-space: pre-line;
+    font-size: clamp(32px, 3.4vw, 49px);
+    font-weight: 700;
+    letter-spacing: -1.8px;
+    line-height: 1.12;
+    margin: 0;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 650;
+    letter-spacing: -0.6px;
+    line-height: 1.3;
+    margin: 0;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    margin: 8px 0;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: left;
+    font-size: 12px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  th {
+    color: var(--muted);
+    font-weight: 450;
+    font-size: 12px;
+    padding: 14px 13px;
+  }
+  td {
+    color: var(--ink);
+    padding: 18px 13px;
+    border-bottom: 1px solid var(--line);
+  }
+  dl {
+    margin: 24px 0;
+  }
+  dl > div {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 18px;
+    padding: 18px 0;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+  }
+  dt {
+    color: var(--muted);
+  }
+  dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 580px) {
+    h1 {
+      font-size: 34px;
+      letter-spacing: -1.1px;
+    }
+    dl > div {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+}

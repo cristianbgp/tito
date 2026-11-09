@@ -1,0 +1,1 @@
+export { localGameCopy } from "./index";

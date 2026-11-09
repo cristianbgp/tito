@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/brand/isotype-32.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/brand/isotype-180.png"
+    />
+    <meta
+      name="theme-color"
+      content="#15171b"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta
+      name="theme-color"
+      content="#f3f5fa"
+      media="(prefers-color-scheme: light)"
+    />
+    <script>
+      (() => {
+        let choice;
+        try {
+          choice = localStorage.getItem("tito:appearance");
+        } catch {}
+        const theme =
+          choice === "light" || choice === "dark"
+            ? choice
+            : matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        document
+          .querySelectorAll('meta[name="theme-color"]')
+          .forEach((meta) => {
+            meta.setAttribute(
+              "content",
+              theme === "dark" ? "#15171b" : "#f3f5fa",
+            );
+          });
+      })();
+    </script>
+    <!-- tito:metadata -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

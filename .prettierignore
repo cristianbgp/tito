@@ -1,0 +1,9 @@
+node_modules
+dist
+bun.lock
+.data
+.react-email
+apps/web/src/api/generated
+apps/api/openapi.json
+apps/api/drizzle/meta
+apps/api/src/db/schema.ts

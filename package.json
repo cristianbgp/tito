@@ -1,0 +1,50 @@
+{
+  "name": "tito",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.4.4",
+  "engines": {
+    "bun": ">=1.4.4",
+    "node": ">=24"
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "bun --no-env-file node_modules/@cristianbgp/crew/bin/crew.cjs",
+    "start": "bun run --cwd apps/api start",
+    "dev:ports": "PORTLESS=0 bun run dev",
+    "dev:web": "sh -ac 'if [ \"$PORTLESS\" != \"0\" ]; then . ./.env.portless; fi; exec portless run --name tito bun run --cwd apps/web dev'",
+    "dev:api": "sh -ac 'if [ \"$PORTLESS\" != \"0\" ]; then . ./.env.portless; fi; exec portless run --name api.tito bun run --cwd apps/api dev'",
+    "dev:emails": "sh -ac 'if [ \"$PORTLESS\" != \"0\" ]; then . ./.env.portless; fi; exec portless run --name emails.tito bun run --cwd apps/api email:dev'",
+    "generate:api": "bun run --cwd apps/api openapi && orval --config orval.config.ts",
+    "db:generate": "bun run --cwd apps/api db:generate",
+    "db:migrate": "bun run --cwd apps/api db:migrate",
+    "db:studio": "bun run --cwd apps/api db:studio",
+    "typecheck": "tsc -p apps/api/tsconfig.json --noEmit && tsc -p apps/web/tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:postgres": "bun run --cwd apps/api test:postgres",
+    "build": "bun run --cwd apps/web build && bun run --cwd apps/api build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "bun run typecheck && bun run test && bun run build && bun run format:check"
+  },
+  "devDependencies": {
+    "@cristianbgp/crew": "0.2.2",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
+    "@types/bun": "^1.4.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "jsdom": "^31.0.0",
+    "orval": "^8.46.0",
+    "portless": "0.16.0",
+    "prettier": "^3.9.10",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  },
+  "patchedDependencies": {
+    "better-auth-steam@0.2.3": "patches/better-auth-steam@0.2.3.patch"
+  }
+}

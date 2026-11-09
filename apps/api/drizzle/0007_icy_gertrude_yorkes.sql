@@ -1,0 +1,1 @@
+ALTER TABLE "player_match" ADD COLUMN "lobby_type" integer;
