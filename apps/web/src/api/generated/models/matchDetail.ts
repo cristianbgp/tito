@@ -5,6 +5,7 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { AdvantagePoint } from './advantagePoint.ts';
+import type { MatchDetailSource } from './matchDetailSource.ts';
 import type { MatchDetailWinner } from './matchDetailWinner.ts';
 import type { MatchObjective } from './matchObjective.ts';
 import type { MatchPlayer } from './matchPlayer.ts';
@@ -17,6 +18,7 @@ export interface MatchDetail {
   /** @nullable */
   winner: MatchDetailWinner;
   parsed: boolean;
+  source?: MatchDetailSource;
   /** @nullable */
   gameMode: number | null;
   /** @nullable */

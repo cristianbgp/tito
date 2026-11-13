@@ -1,7 +1,7 @@
 [build]
-builder = "RAILPACK"
-buildCommand = "bun run --cwd apps/api build"
-watchPatterns = ["apps/api/**", "shared/**", "package.json", "bun.lock", "patches/**", "railway.toml"]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+watchPatterns = ["apps/api/**", "shared/**", "package.json", "bun.lock", "patches/**", "railway.toml", "Dockerfile", ".dockerignore"]
 
 [deploy]
 startCommand = "bun run start"

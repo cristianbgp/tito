@@ -11,6 +11,7 @@ import {
   patchChangesSchema,
 } from "./contracts";
 import { matchEvidence } from "./service";
+import { readReplay } from "../replays/storage";
 const json = (schema: z.ZodType, description: string) => ({
   content: { "application/json": { schema } },
   description,
@@ -26,9 +27,9 @@ const errors = {
 export function registerIntelligenceRoutes(
   app: OpenAPIHono,
   _config: Config,
-  _auth: Auth,
+  auth: Auth,
   dota: OpenDota,
-  _db?: Database,
+  db?: Database,
 ) {
   app.openapi(
     createRoute({
@@ -69,10 +70,14 @@ export function registerIntelligenceRoutes(
       // revalidate so a prior unparsed response cannot hide the new evidence.
       c.header("Cache-Control", "no-cache");
       try {
-        return c.json(
-          matchEvidence(await dota.match(c.req.valid("param").id)),
-          200,
-        );
+        const id = c.req.valid("param").id;
+        const session = db
+          ? await auth.api.getSession({ headers: c.req.raw.headers })
+          : null;
+        const replay =
+          db && session ? await readReplay(db, session.user.id, id) : null;
+        if (replay) c.header("Cache-Control", "private, no-store");
+        return c.json(matchEvidence(replay ?? (await dota.match(id))), 200);
       } catch (error) {
         if (error instanceof DataError)
           return c.json({ error: error.message }, error.status);

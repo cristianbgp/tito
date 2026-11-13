@@ -9,6 +9,7 @@ import type { SavedHistory } from "../../api/generated/models";
 import { copy, dateFormatter } from "../../i18n";
 import { Button } from "../ui/button";
 import { RequestError } from "../shared";
+import { ReplayImportControl } from "./replay-import";
 
 export function SavedHistoryControls({
   history,
@@ -22,6 +23,7 @@ export function SavedHistoryControls({
   onShowMore: () => void;
 }) {
   useLocale();
+  const [showReplay, setShowReplay] = useState(false);
   const client = useQueryClient();
   const active = useRef(true);
   useEffect(() => {
@@ -131,7 +133,18 @@ export function SavedHistoryControls({
             {copy.savedHistory.more}
           </Button>
         ) : null}
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-expanded={showReplay}
+          onClick={() => setShowReplay((value) => !value)}
+        >
+          {copy.replayImport.action}
+        </Button>
       </div>
+      {showReplay && history ? (
+        <ReplayImportControl scope={scope} accountId={history.accountId} />
+      ) : null}
       {sync.isPending && slow ? (
         <p
           role="status"

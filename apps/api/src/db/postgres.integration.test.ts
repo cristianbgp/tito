@@ -63,6 +63,8 @@ describe.skipIf(!baseUrl)("real PostgreSQL lifecycle", () => {
         "player_profile",
         "player_sync",
         "provider_budget",
+        "replay_import_budget",
+        "replay_match",
         "review_attempt",
         "review_budget",
         "review_control",
@@ -75,8 +77,13 @@ describe.skipIf(!baseUrl)("real PostgreSQL lifecycle", () => {
         await client`select count(*)::int as count from drizzle.__drizzle_migrations`;
       await migrateDatabase({ DATABASE_URL: target.toString() });
       expect(
-        await client`select name from "user" where id = 'migration-check'`,
-      ).toEqual([{ name: "Migration Check" }]);
+        await client`select name, is_admin from "user" where id = 'migration-check'`,
+      ).toEqual([{ name: "Migration Check", is_admin: false }]);
+      await client`update "user" set is_admin = true where id = 'migration-check'`;
+      await migrateDatabase({ DATABASE_URL: target.toString() });
+      expect(
+        await client`select is_admin from "user" where id = 'migration-check'`,
+      ).toEqual([{ is_admin: true }]);
       const journal =
         await client`select count(*)::int as count from drizzle.__drizzle_migrations`;
       expect(journal[0].count).toBe(before[0].count);

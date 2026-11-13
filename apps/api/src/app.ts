@@ -1,6 +1,12 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { secureHeaders } from "hono/secure-headers";
 import { bodyLimit } from "hono/body-limit";
+import { replayChunkBytes } from "./replays/contracts";
+import { ReplayError } from "./replays/errors";
+import { ReplayImports } from "./replays/imports";
+import { createReplayParser, type ReplayParser } from "./replays/parser";
+import { registerReplayImportRoutes } from "./replays/routes";
+import { readReplay } from "./replays/storage";
 import type { Auth } from "./auth";
 import { isLocalUrl, type Config } from "./config";
 import { listLocalEmails, localEmailSchema } from "./email";
@@ -45,6 +51,7 @@ export function createApp(
   reviewModel?: ReviewModel,
   draftModel?: DraftModel,
   coachingModel?: CoachingModel,
+  replayParser?: ReplayParser,
 ) {
   dota ??= new OpenDota(
     config.openDotaApiKey,
@@ -64,14 +71,19 @@ export function createApp(
     },
   });
   app.use("*", secureHeaders());
-  app.use(
-    "/api/*",
+  app.use("/api/*", (c, next) =>
     bodyLimit({
-      maxSize: 32_768,
+      maxSize:
+        c.req.method === "PUT" &&
+        /^\/api\/replays\/imports\/[^/]+$/.test(c.req.path)
+          ? replayChunkBytes
+          : 32_768,
       onError: (c) => c.json({ error: "Request too large." }, 413),
-    }),
+    })(c, next),
   );
   app.onError((error, c) => {
+    if (error instanceof ReplayError)
+      return c.json({ error: error.message }, error.status);
     if (error instanceof DataError) {
       if (error.retryAfter) c.header("Retry-After", String(error.retryAfter));
       return c.json({ error: error.message }, error.status);
@@ -168,7 +180,22 @@ export function createApp(
         ...errors,
       },
     }),
-    async (c) => c.json(await dota.match(c.req.valid("param").matchId), 200),
+    async (c) => {
+      const id = c.req.valid("param").matchId;
+      if (db) {
+        const session = await auth.api.getSession({
+          headers: c.req.raw.headers,
+        });
+        const replay = session
+          ? await readReplay(db, session.user.id, id)
+          : null;
+        if (replay) {
+          c.header("Cache-Control", "private, no-store");
+          return c.json(replay, 200);
+        }
+      }
+      return c.json(await dota.match(id), 200);
+    },
   );
 
   if (!config.production && config.emailTransport === "local") {
@@ -202,10 +229,16 @@ export function createApp(
   registerLibraryRoutes(app, config, auth, db);
   registerIntelligenceRoutes(app, config, auth, dota, db);
   registerCoachingRoutes(app, config, auth, dota, db, coachingModel);
+  const replayImports = db
+    ? new ReplayImports(config, db, replayParser ?? createReplayParser(config))
+    : null;
+  registerReplayImportRoutes(app, config, auth, replayImports);
 
   app.doc("/api/openapi.json", {
     openapi: "3.1.0",
     info: { title: "Tito API", version: "0.1.0" },
   });
-  return app;
+  return Object.assign(app, {
+    closeReplayImports: () => replayImports?.close() ?? Promise.resolve(),
+  });
 }

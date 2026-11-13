@@ -2,9 +2,9 @@
 
 Tito's MIT license covers its original code. Dependencies and third-party material retain their own licenses and rights. Package licenses are distributed with installed dependencies; this file records bundled source/data that needs an explicit notice.
 
-## OpenDota dotaconstants
+## OpenDota dotaconstants and replay parser
 
-The normalized hero snapshots in `apps/api/src/draft/heroes.snapshot.json` and `apps/web/public/reference-catalog.json` derive from [OpenDota dotaconstants](https://github.com/odota/dotaconstants), including its [hero catalog](https://github.com/odota/dotaconstants/blob/master/build/heroes.json). Snapshot retrieval metadata is included in the files. The upstream [MIT license](https://github.com/odota/dotaconstants/blob/master/LICENSE) follows:
+The normalized hero snapshots in `apps/api/src/draft/heroes.snapshot.json` and `apps/web/public/reference-catalog.json`, and the item snapshot in `apps/api/src/replays/items.snapshot.json`, derive from [OpenDota dotaconstants](https://github.com/odota/dotaconstants). Snapshot retrieval metadata is included in the files. Replay builds bundle [OpenDota's parser](https://github.com/odota/parser) at commit `67945be040de92d0ba9cdedc77434886d4f736be`; its license is also copied alongside the built JAR. These projects use the following MIT license:
 
 ```text
 MIT License

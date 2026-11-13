@@ -80,7 +80,12 @@ export function RecentMatchesTable({
                     />
                     <span>
                       <strong>{serviceText(match.hero)}</strong>
-                      <small>#{match.id}</small>
+                      <small>
+                        #{match.id}
+                        {match.source === "replay"
+                          ? ` · ${copy.replayImport.source}`
+                          : ""}
+                      </small>
                     </span>
                   </Button>
                   <Link

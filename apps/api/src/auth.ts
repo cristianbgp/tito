@@ -16,6 +16,7 @@ export function createAuth(config: Config, db: Database) {
     user: {
       additionalFields: {
         locale: { type: "string", defaultValue: "en", input: false },
+        isAdmin: { type: "boolean", defaultValue: false, input: false },
       },
     },
     advanced: { useSecureCookies: config.webUrl.startsWith("https://") },

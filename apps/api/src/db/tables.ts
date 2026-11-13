@@ -10,3 +10,4 @@ export {
 export { heroDraft } from "../draft/schema";
 export { heroPool, matchAnnotation, draftSnapshot } from "../library/schema";
 export { coachingState } from "../coaching/schema";
+export { replayMatch, replayImportBudget } from "../replays/schema";

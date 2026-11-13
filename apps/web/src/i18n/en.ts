@@ -77,6 +77,8 @@ export const en = {
     loss: "Defeat",
     unknown: "Unavailable",
     source: "Match data from OpenDota",
+    replaySource: "Match data from your replay imports",
+    mixedSource: "Match data from OpenDota and your replay imports",
     refresh: "Refresh matches",
     preview: "Selected match",
     previewAction: (hero: string) => `Preview ${hero} match`,
@@ -171,6 +173,29 @@ export const en = {
     heroTitle: "Saved hero performance",
     heroScope: (count: number) =>
       `Based on ${count} loaded saved ${count === 1 ? "match" : "matches"}, before filters. This is your imported sample, not your complete lifetime history.`,
+  },
+  replayImport: {
+    action: "Import replay",
+    title: "Keep your lobby games, too.",
+    description:
+      "Download the replay from Dota and choose its .dem file. Your linked Steam account must be a player in the match.",
+    file: "Replay file (.dem)",
+    submit: "Import this replay",
+    cancel: "Cancel import",
+    uploading: "Uploading replay…",
+    processing: "Reading your replay…",
+    progress: "Replay upload progress",
+    processingHelp:
+      "You can leave this page. Your imported match will be saved when processing finishes.",
+    success: "Your replay is saved in match history.",
+    open: "Open imported match",
+    source: "Replay import",
+    unavailable: "Replay import is not available on this server yet.",
+    invalid: "Choose a complete .dem replay within the size limit.",
+    limits: (megabytes: number, retention: number, daily: number) =>
+      `Up to ${megabytes} MB per file and ${daily} import attempts per day (UTC). Keeps your newest ${retention} imported replays.`,
+    privacy:
+      "Replay files are deleted after processing. Extracted match statistics are saved privately in your account.",
   },
   history: {
     search: "Hero or match ID",

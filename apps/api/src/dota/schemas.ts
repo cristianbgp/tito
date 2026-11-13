@@ -20,6 +20,7 @@ export const recentMatchSchema = z
     lobbyType: z.number().int().nullable().optional(),
     patch: z.number().int().nullable().optional(),
     actualRole: z.string().nullable().optional(),
+    source: z.enum(["opendota", "replay"]).optional(),
   })
   .openapi("RecentMatch");
 export const itemSlotSchema = z
@@ -108,6 +109,7 @@ export const matchDetailSchema = z
     duration: z.number(),
     winner: z.enum(["radiant", "dire"]).nullable(),
     parsed: z.boolean(),
+    source: z.enum(["opendota", "replay"]).optional(),
     gameMode: z.number().int().nullable(),
     lobbyType: z.number().int().nullable(),
     patch: z.number().int().nullable().optional(),

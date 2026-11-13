@@ -3,6 +3,45 @@ import { getLocale } from "./index";
 
 // Exact server-owned messages only. Unknown, external, user, and AI prose stays intact.
 const spanish: Readonly<Record<string, string>> = {
+  "This replay has incomplete or unsupported match data.":
+    "La repetición contiene datos incompletos o no compatibles.",
+  "Your linked Steam account is not a player in this replay.":
+    "Tu cuenta de Steam conectada no participó en esta repetición.",
+  "Replay processing stopped or took too long. Try importing again.":
+    "El procesamiento se detuvo o tardó demasiado. Vuelve a importar la repetición.",
+  "This replay could not be read. Download the complete .dem file from Dota and try again.":
+    "No se pudo leer la repetición. Descarga el archivo .dem completo desde Dota e inténtalo de nuevo.",
+  "Replay import was cancelled.": "Se canceló la importación de la repetición.",
+  "Wait for match sync to finish before importing this replay.":
+    "Espera a que termine la sincronización antes de importar esta repetición.",
+  "This replay is older than your retained match history.":
+    "Esta repetición es anterior al historial de partidas que conservas.",
+  "Replay import is not available on this server yet.":
+    "La importación de repeticiones aún no está disponible en este servidor.",
+  "Another replay import is running. Try again shortly.":
+    "Hay otra importación en curso. Vuelve a intentarlo en un momento.",
+  "Wait one minute before starting another replay import.":
+    "Espera un minuto antes de iniciar otra importación de repetición.",
+  "Replay upload expired or was not found. Import the file again.":
+    "La carga venció o no se encontró. Vuelve a importar el archivo.",
+  "The replay upload is out of sequence. Import the file again.":
+    "Los fragmentos de la repetición llegaron fuera de orden. Vuelve a importar el archivo.",
+  "Choose an uncompressed Dota 2 .dem replay file.":
+    "Elige un archivo de repetición .dem de Dota 2 sin comprimir.",
+  "The replay upload is incomplete. Import the full file again.":
+    "La carga está incompleta. Vuelve a importar el archivo completo.",
+  "Replay import failed. Try again shortly.":
+    "No se pudo importar la repetición. Vuelve a intentarlo en un momento.",
+  "Temporary replay cleanup failed. Try again shortly.":
+    "No se pudo limpiar el archivo temporal de la repetición. Vuelve a intentarlo en un momento.",
+  "The daily replay import limit has been reached. Try again tomorrow.":
+    "Se alcanzó el límite diario de importaciones de repeticiones. Vuelve a intentarlo mañana.",
+  "Sign in to import your replays.":
+    "Inicia sesión para importar tus repeticiones.",
+  "Connect Steam to import your own replays.":
+    "Conecta Steam para importar tus propias repeticiones.",
+  "Reload Tito and try importing again.":
+    "Recarga Tito y vuelve a importar la repetición.",
   "No heroes are available for this draft. Remove a pick, ban or saved Avoid preference.":
     "No hay héroes disponibles para este draft. Quita una selección, un bloqueo o una preferencia guardada de Evitar.",
   "Only your own match can be reviewed. Connect the Steam account that played this game or sync its saved history.":

@@ -42,6 +42,9 @@ export const playerMatch = pgTable(
     lobbyType: integer("lobby_type"),
     patch: integer("patch"),
     actualRole: text("actual_role"),
+    source: text("source", { enum: ["opendota", "replay"] })
+      .default("opendota")
+      .notNull(),
     heroImage: text("hero_image"),
     result: text("result", { enum: ["win", "loss"] }),
     kills: doublePrecision("kills"),

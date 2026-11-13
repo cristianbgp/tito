@@ -57,6 +57,27 @@
       "when": 1794170643428,
       "tag": "0007_icy_gertrude_yorkes",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794600420585,
+      "tag": "0008_admin_users",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794602680278,
+      "tag": "0009_replay_import",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794602897738,
+      "tag": "0010_replay_import_limits",
+      "breakpoints": true
     }
   ]
 }

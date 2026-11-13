@@ -238,7 +238,11 @@ export function MatchesPage() {
             ) : null}
           </div>
           <p className="data-credit mt-3.75 mx-2 mb-0.75 text-[var(--faint)] text-[10px]">
-            {copy.home.source}
+            {data?.some((match) => match.source === "replay")
+              ? data.every((match) => match.source === "replay")
+                ? copy.home.replaySource
+                : copy.home.mixedSource
+              : copy.home.source}
           </p>
         </Card>
         {selected ? (

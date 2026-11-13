@@ -16,6 +16,7 @@ export default defineConfig({
     "./src/draft/schema.ts",
     "./src/library/schema.ts",
     "./src/coaching/schema.ts",
+    "./src/replays/schema.ts",
   ],
   out: "./drizzle",
   ...(process.env.DATABASE_URL

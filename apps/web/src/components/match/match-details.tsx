@@ -68,6 +68,7 @@ export function MatchDetails({
             {copy.match.overview}
           </span>
           <Badge>
+            {match.source === "replay" ? `${copy.replayImport.source} · ` : ""}
             {match.parsed ? copy.match.parsed : copy.match.unparsed}
           </Badge>
         </div>
@@ -90,16 +91,18 @@ export function MatchDetails({
                 ? `${match.winner === "radiant" ? copy.match.radiant : copy.match.dire}${copy.match.winner}`
                 : copy.match.unknownWinner}
             </h2>
-            <a
-              className={
-                "text-link inline-flex items-center gap-1.75 text-primary text-[12px] [@media(hover:_hover)]:[&:hover]:text-foreground"
-              }
-              href={`https://www.opendota.com/matches/${match.id}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {copy.match.openDota} ↗
-            </a>
+            {match.source !== "replay" ? (
+              <a
+                className={
+                  "text-link inline-flex items-center gap-1.75 text-primary text-[12px] [@media(hover:_hover)]:[&:hover]:text-foreground"
+                }
+                href={`https://www.opendota.com/matches/${match.id}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {copy.match.openDota} ↗
+              </a>
+            ) : null}
           </div>
           <div className={"dire-color text-[var(--danger)]"}>
             <span>{copy.match.dire}</span>

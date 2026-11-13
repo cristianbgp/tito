@@ -64,6 +64,23 @@ export function readConfig(env: Record<string, string | undefined>) {
       .parse(env.PORT ?? 3001),
     databaseUrl: env.DATABASE_URL || undefined,
     dataDir: resolve(env.DATA_DIR ?? resolve(root, ".data")),
+    replayParserJar: resolve(
+      env.REPLAY_PARSER_JAR ?? resolve(root, ".data/replay-parser/parser.jar"),
+    ),
+    replayJavaBin:
+      env.REPLAY_JAVA_BIN ?? resolve(root, ".data/replay-parser/java/bin/java"),
+    replayUserDailyLimit: z.coerce
+      .number()
+      .int()
+      .min(0)
+      .max(100)
+      .parse(env.REPLAY_USER_DAILY_LIMIT ?? 5),
+    replayDailyLimit: z.coerce
+      .number()
+      .int()
+      .min(0)
+      .max(1000)
+      .parse(env.REPLAY_DAILY_LIMIT ?? 50),
     resendApiKey: env.RESEND_API_KEY,
     emailFrom: env.EMAIL_FROM ?? "Tito <hello@tito.localhost>",
     steamApiKey,

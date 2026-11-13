@@ -15,6 +15,7 @@ import {
   type ReviewModel,
 } from "./provider";
 import { matchReview, reviewControl } from "./schema";
+import { readReplay } from "../replays/storage";
 
 export class ReviewService {
   constructor(
@@ -145,7 +146,9 @@ export class ReviewService {
       const saved = history.find((m) => m.id === matchId);
       let detail = null;
       try {
-        detail = await this.source.match(matchId);
+        detail =
+          (await readReplay(this.db, userId, matchId)) ??
+          (await this.source.match(matchId));
       } catch (error) {
         if (!(error instanceof DataError) || !saved) throw error;
       }

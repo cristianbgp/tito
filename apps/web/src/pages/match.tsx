@@ -3,6 +3,7 @@ import { Alert } from "../components/ui/alert";
 import { Link, useParams, useSearchParams } from "react-router";
 import {
   getGetPlayerProfileQueryKey,
+  getGetMatchQueryKey,
   useGetMatch,
   useGetPlayerProfile,
 } from "../api/generated/tito";
@@ -19,7 +20,7 @@ export function MatchPage() {
   const { matchId = "" } = useParams();
   const [params] = useSearchParams();
   const selectedAccountId = params.get("player");
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending: sessionPending } = authClient.useSession();
   const profile = useGetPlayerProfile({
     query: {
       queryKey: [...getGetPlayerProfileQueryKey(), session?.user.id],
@@ -27,7 +28,10 @@ export function MatchPage() {
     },
   });
   const { data, error, isFetching, refetch } = useGetMatch(matchId, {
-    query: { enabled: Boolean(matchId) },
+    query: {
+      enabled: Boolean(matchId) && !sessionPending,
+      queryKey: [...getGetMatchQueryKey(matchId), session?.user.id ?? "guest"],
+    },
   });
   const back =
     selectedAccountId && /^[1-9]\d{0,9}$/.test(selectedAccountId)
@@ -77,6 +81,7 @@ export function MatchPage() {
               key={`${data.id}:${session?.user.id ?? "guest"}`}
               matchId={data.id}
               signedIn={Boolean(session)}
+              cacheScope={session?.user.id ?? "guest"}
             />
           }
         />

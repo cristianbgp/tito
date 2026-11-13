@@ -14,6 +14,7 @@ export const user = pgTable("user", {
     .notNull(),
   steamId: text("steam_id").unique(),
   locale: text("locale").default("en").notNull(),
+  isAdmin: boolean("is_admin").default(false).notNull(),
 });
 
 export const session = pgTable(

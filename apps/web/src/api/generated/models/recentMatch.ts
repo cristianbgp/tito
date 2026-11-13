@@ -5,6 +5,7 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { RecentMatchResult } from './recentMatchResult.ts';
+import type { RecentMatchSource } from './recentMatchSource.ts';
 
 export interface RecentMatch {
   id: string;
@@ -35,4 +36,5 @@ export interface RecentMatch {
   patch?: number | null;
   /** @nullable */
   actualRole?: string | null;
+  source?: RecentMatchSource;
 }

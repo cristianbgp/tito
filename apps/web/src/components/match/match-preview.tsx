@@ -5,7 +5,7 @@ import { buttonVariants } from "../ui/button";
 import { Card } from "../ui/card";
 import { Link } from "react-router";
 import type { MatchDetail, RecentMatch } from "../../api/generated/models";
-import { useGetMatch } from "../../api/generated/tito";
+import { getGetMatchQueryKey, useGetMatch } from "../../api/generated/tito";
 import {
   unavailable,
   copy,
@@ -159,7 +159,15 @@ export function MatchPreview({
   deferDetails?: boolean;
 }) {
   useLocale();
-  const detail = useGetMatch(recent.id, { query: { enabled: !deferDetails } });
+  const detail = useGetMatch(recent.id, {
+    query: {
+      enabled: !deferDetails,
+      queryKey: [
+        ...getGetMatchQueryKey(recent.id),
+        recent.source === "replay" ? recent.accountId : "public",
+      ],
+    },
+  });
   return (
     <MatchPreviewContent
       recent={recent}

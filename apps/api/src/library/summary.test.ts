@@ -21,6 +21,7 @@ const game = (
   patch: null,
   gameMode: null,
   lobbyType: null,
+  source: "opendota",
   result: null,
   kills: null,
   deaths: null,

@@ -232,6 +232,7 @@ export class HistoryService {
                 goldPerMinute: sql`coalesce(excluded.gold_per_minute, ${playerMatch.goldPerMinute})`,
                 experiencePerMinute: sql`coalesce(excluded.experience_per_minute, ${playerMatch.experiencePerMinute})`,
               },
+              setWhere: sql`${playerMatch.source} <> 'replay'`,
             });
         }
         await tx.execute(

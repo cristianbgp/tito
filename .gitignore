@@ -40,3 +40,6 @@ id_ed25519
 /docs/spacing-design-audit-*.md
 
 gamestate_integration_tito.cfg
+*.dem
+*.dem.bz2
+*.dem.zst

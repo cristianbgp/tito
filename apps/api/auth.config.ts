@@ -10,6 +10,7 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       locale: { type: "string", defaultValue: "en", input: false },
+      isAdmin: { type: "boolean", defaultValue: false, input: false },
     },
   },
   plugins: [steamOpenID({ apiKey: "schema-generation-only" })],

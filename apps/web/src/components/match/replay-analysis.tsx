@@ -107,9 +107,11 @@ export function ReplayAnalysisView({
 export function ReplayAnalysis({
   matchId,
   signedIn,
+  cacheScope,
 }: {
   matchId: string;
   signedIn: boolean;
+  cacheScope?: string;
 }) {
   useLocale();
   const client = useQueryClient();
@@ -141,7 +143,11 @@ export function ReplayAnalysis({
   });
   useEffect(() => {
     if (progress.data?.match) {
-      client.setQueryData(getGetMatchQueryKey(matchId), progress.data.match);
+      const matchKey = getGetMatchQueryKey(matchId);
+      client.setQueryData(
+        cacheScope ? [...matchKey, cacheScope] : matchKey,
+        progress.data.match,
+      );
       // Parsing can finish while a previously loaded evidence request is still
       // in flight. Discard that older read before refreshing active evidence.
       const queryKey = getGetMatchEvidenceQueryKey(matchId);
@@ -149,7 +155,7 @@ export function ReplayAnalysis({
         .cancelQueries({ queryKey })
         .then(() => client.invalidateQueries({ queryKey }));
     }
-  }, [client, matchId, progress.data]);
+  }, [client, matchId, cacheScope, progress.data]);
 
   const error = submit.error ?? progress.error;
   const state: ReplayState = submit.isPending

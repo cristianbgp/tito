@@ -77,6 +77,8 @@ export const es = {
     loss: "Derrota",
     unknown: "No disponible",
     source: "Datos de partidas de OpenDota",
+    replaySource: "Datos de tus repeticiones importadas",
+    mixedSource: "Datos de OpenDota y de tus repeticiones importadas",
     refresh: "Actualizar partidas",
     preview: "Partida seleccionada",
     previewAction: (hero: string) => `Vista previa de la partida con ${hero}`,
@@ -172,6 +174,31 @@ export const es = {
     heroTitle: "Rendimiento guardado por héroe",
     heroScope: (count: number) =>
       `Basado en ${count} ${count === 1 ? "partida guardada cargada" : "partidas guardadas cargadas"}, antes de aplicar filtros. Esta es tu muestra importada, no tu historial completo.`,
+  },
+  replayImport: {
+    action: "Importar repetición",
+    title: "Guarda también tus partidas de sala.",
+    description:
+      "Descarga la repetición desde Dota y elige el archivo .dem. Tu cuenta de Steam conectada debe haber jugado la partida.",
+    file: "Archivo de repetición (.dem)",
+    submit: "Importar esta repetición",
+    cancel: "Cancelar importación",
+    uploading: "Subiendo repetición…",
+    processing: "Leyendo tu repetición…",
+    progress: "Progreso de carga de la repetición",
+    processingHelp:
+      "Puedes salir de esta página. La partida se guardará cuando termine el procesamiento.",
+    success: "Tu repetición se guardó en el historial de partidas.",
+    open: "Abrir partida importada",
+    source: "Repetición importada",
+    unavailable:
+      "La importación de repeticiones aún no está disponible en este servidor.",
+    invalid:
+      "Elige una repetición .dem completa que no supere el tamaño permitido.",
+    limits: (megabytes: number, retention: number, daily: number) =>
+      `Hasta ${megabytes} MB por archivo y ${daily} intentos de importación al día (UTC). Conserva tus ${retention} repeticiones importadas más recientes.`,
+    privacy:
+      "Los archivos de repetición se eliminan después del procesamiento. Las estadísticas extraídas se guardan de forma privada en tu cuenta.",
   },
   history: {
     search: "Héroe o ID de partida",

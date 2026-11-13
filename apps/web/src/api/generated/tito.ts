@@ -63,6 +63,9 @@ import type {
   PlayerProfile,
   PlayerProgress,
   RecentMatch,
+  ReplayImportCapabilities,
+  ReplayImportInput,
+  ReplayImportState,
   SaveDraftSnapshotBody,
   SaveHeroPoolBody,
   SaveMatchNoteBody,
@@ -76,7 +79,8 @@ import type {
   SetupLocalGameStateBody,
   SyncHistory,
   UpdateDraftSnapshotBody,
-  UpdatePlayerProfile
+  UpdatePlayerProfile,
+  UploadReplayChunkParams
 } from './models';
 
 import { apiFetch } from '../transport.ts';
@@ -4058,5 +4062,505 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
         TContext
       > => {
       return useMutation(getGenerateMatchFollowUpMutationOptions(options), queryClient);
+    }
+
+export const getGetReplayImportCapabilitiesUrl = () => {
+
+
+
+
+  return `/api/replays/capabilities`
+}
+
+export const getReplayImportCapabilities = async ( options?: Parameters<typeof apiFetch>[1]): Promise<ReplayImportCapabilities> => {
+
+  return apiFetch<ReplayImportCapabilities>(getGetReplayImportCapabilitiesUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetReplayImportCapabilitiesQueryKey = () => {
+    return [
+    `/api/replays/capabilities`
+    ] as const;
+    }
+
+
+export const getGetReplayImportCapabilitiesQueryOptions = <TData = Awaited<ReturnType<typeof getReplayImportCapabilities>>, TError = ApiError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReplayImportCapabilities>>, TError, TData>>, request?: SecondParameter<typeof apiFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetReplayImportCapabilitiesQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getReplayImportCapabilities>>> = ({ signal }) => getReplayImportCapabilities({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getReplayImportCapabilities>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetReplayImportCapabilitiesQueryResult = NonNullable<Awaited<ReturnType<typeof getReplayImportCapabilities>>>
+export type GetReplayImportCapabilitiesQueryError = ApiError
+
+
+export function useGetReplayImportCapabilities<TData = Awaited<ReturnType<typeof getReplayImportCapabilities>>, TError = ApiError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReplayImportCapabilities>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getReplayImportCapabilities>>,
+          TError,
+          Awaited<ReturnType<typeof getReplayImportCapabilities>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetReplayImportCapabilities<TData = Awaited<ReturnType<typeof getReplayImportCapabilities>>, TError = ApiError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReplayImportCapabilities>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getReplayImportCapabilities>>,
+          TError,
+          Awaited<ReturnType<typeof getReplayImportCapabilities>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetReplayImportCapabilities<TData = Awaited<ReturnType<typeof getReplayImportCapabilities>>, TError = ApiError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReplayImportCapabilities>>, TError, TData>>, request?: SecondParameter<typeof apiFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetReplayImportCapabilities<TData = Awaited<ReturnType<typeof getReplayImportCapabilities>>, TError = ApiError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReplayImportCapabilities>>, TError, TData>>, request?: SecondParameter<typeof apiFetch>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetReplayImportCapabilitiesQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getStartReplayImportUrl = () => {
+
+
+
+
+  return `/api/replays/imports`
+}
+
+export const startReplayImport = async (replayImportInput: ReplayImportInput, options?: Parameters<typeof apiFetch>[1]): Promise<ReplayImportState> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return apiFetch<ReplayImportState>(getStartReplayImportUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(replayImportInput)
+  }
+);}
+
+
+
+
+
+export const getStartReplayImportMutationKey = () => ['startReplayImport'] as const;
+
+export const getStartReplayImportMutationOptions = <TError = ApiError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startReplayImport>>, TError,StartReplayImportMutationVariables, TContext>, request?: SecondParameter<typeof apiFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof startReplayImport>>, TError,StartReplayImportMutationVariables, TContext> => {
+
+const mutationKey = getStartReplayImportMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof startReplayImport>>, StartReplayImportMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  startReplayImport(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type StartReplayImportMutationResult = NonNullable<Awaited<ReturnType<typeof startReplayImport>>>
+    export type StartReplayImportMutationBody = ReplayImportInput
+    export type StartReplayImportMutationError = ApiError
+    export type StartReplayImportMutationVariables = {data: ReplayImportInput}
+
+    export const useStartReplayImport = <TError = ApiError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startReplayImport>>, TError,StartReplayImportMutationVariables, TContext>, request?: SecondParameter<typeof apiFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof startReplayImport>>,
+        TError,
+        StartReplayImportMutationVariables,
+        TContext
+      > => {
+      return useMutation(getStartReplayImportMutationOptions(options), queryClient);
+    }
+
+export const getGetReplayImportUrl = (id: string,) => {
+
+
+
+
+  return `/api/replays/imports/${id}`
+}
+
+export const getReplayImport = async (id: string, options?: Parameters<typeof apiFetch>[1]): Promise<ReplayImportState> => {
+
+  return apiFetch<ReplayImportState>(getGetReplayImportUrl(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetReplayImportQueryKey = (id: string,) => {
+    return [
+    `/api/replays/imports/${id}`
+    ] as const;
+    }
+
+
+export const getGetReplayImportQueryOptions = <TData = Awaited<ReturnType<typeof getReplayImport>>, TError = ApiError>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReplayImport>>, TError, TData>>, request?: SecondParameter<typeof apiFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetReplayImportQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getReplayImport>>> = ({ signal }) => getReplayImport(id, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getReplayImport>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetReplayImportQueryResult = NonNullable<Awaited<ReturnType<typeof getReplayImport>>>
+export type GetReplayImportQueryError = ApiError
+
+
+export function useGetReplayImport<TData = Awaited<ReturnType<typeof getReplayImport>>, TError = ApiError>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReplayImport>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getReplayImport>>,
+          TError,
+          Awaited<ReturnType<typeof getReplayImport>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetReplayImport<TData = Awaited<ReturnType<typeof getReplayImport>>, TError = ApiError>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReplayImport>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getReplayImport>>,
+          TError,
+          Awaited<ReturnType<typeof getReplayImport>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetReplayImport<TData = Awaited<ReturnType<typeof getReplayImport>>, TError = ApiError>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReplayImport>>, TError, TData>>, request?: SecondParameter<typeof apiFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetReplayImport<TData = Awaited<ReturnType<typeof getReplayImport>>, TError = ApiError>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReplayImport>>, TError, TData>>, request?: SecondParameter<typeof apiFetch>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetReplayImportQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getUploadReplayChunkUrl = (id: string,
+    params?: UploadReplayChunkParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/replays/imports/${id}?${stringifiedParams}` : `/api/replays/imports/${id}`
+}
+
+export const uploadReplayChunk = async (id: string,
+    uploadReplayChunkBody: Blob,
+    params?: UploadReplayChunkParams, options?: Parameters<typeof apiFetch>[1]): Promise<ReplayImportState> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return apiFetch<ReplayImportState>(getUploadReplayChunkUrl(id,params),
+  {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/octet-stream', ...getHeaders(options?.headers) },
+    body: uploadReplayChunkBody
+  }
+);}
+
+
+
+
+
+export const getUploadReplayChunkMutationKey = () => ['uploadReplayChunk'] as const;
+
+export const getUploadReplayChunkMutationOptions = <TError = ApiError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadReplayChunk>>, TError,UploadReplayChunkMutationVariables, TContext>, request?: SecondParameter<typeof apiFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof uploadReplayChunk>>, TError,UploadReplayChunkMutationVariables, TContext> => {
+
+const mutationKey = getUploadReplayChunkMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadReplayChunk>>, UploadReplayChunkMutationVariables> = (props) => {
+          const {id,data,params} = props ?? {};
+
+          return  uploadReplayChunk(id,data,params,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UploadReplayChunkMutationResult = NonNullable<Awaited<ReturnType<typeof uploadReplayChunk>>>
+    export type UploadReplayChunkMutationBody = Blob
+    export type UploadReplayChunkMutationError = ApiError
+    export type UploadReplayChunkMutationVariables = {id: string;data: Blob;params?: UploadReplayChunkParams}
+
+    export const useUploadReplayChunk = <TError = ApiError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadReplayChunk>>, TError,UploadReplayChunkMutationVariables, TContext>, request?: SecondParameter<typeof apiFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof uploadReplayChunk>>,
+        TError,
+        UploadReplayChunkMutationVariables,
+        TContext
+      > => {
+      return useMutation(getUploadReplayChunkMutationOptions(options), queryClient);
+    }
+
+export const getCancelReplayImportUrl = (id: string,) => {
+
+
+
+
+  return `/api/replays/imports/${id}`
+}
+
+export const cancelReplayImport = async (id: string, options?: Parameters<typeof apiFetch>[1]): Promise<ReplayImportState> => {
+
+  return apiFetch<ReplayImportState>(getCancelReplayImportUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+
+export const getCancelReplayImportMutationKey = () => ['cancelReplayImport'] as const;
+
+export const getCancelReplayImportMutationOptions = <TError = ApiError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof cancelReplayImport>>, TError,CancelReplayImportMutationVariables, TContext>, request?: SecondParameter<typeof apiFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof cancelReplayImport>>, TError,CancelReplayImportMutationVariables, TContext> => {
+
+const mutationKey = getCancelReplayImportMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof cancelReplayImport>>, CancelReplayImportMutationVariables> = (props) => {
+          const {id} = props ?? {};
+
+          return  cancelReplayImport(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CancelReplayImportMutationResult = NonNullable<Awaited<ReturnType<typeof cancelReplayImport>>>
+
+    export type CancelReplayImportMutationError = ApiError
+    export type CancelReplayImportMutationVariables = {id: string}
+
+    export const useCancelReplayImport = <TError = ApiError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof cancelReplayImport>>, TError,CancelReplayImportMutationVariables, TContext>, request?: SecondParameter<typeof apiFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof cancelReplayImport>>,
+        TError,
+        CancelReplayImportMutationVariables,
+        TContext
+      > => {
+      return useMutation(getCancelReplayImportMutationOptions(options), queryClient);
+    }
+
+export const getCompleteReplayImportUrl = (id: string,) => {
+
+
+
+
+  return `/api/replays/imports/${id}/complete`
+}
+
+export const completeReplayImport = async (id: string, options?: Parameters<typeof apiFetch>[1]): Promise<ReplayImportState> => {
+
+  return apiFetch<ReplayImportState>(getCompleteReplayImportUrl(id),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+
+export const getCompleteReplayImportMutationKey = () => ['completeReplayImport'] as const;
+
+export const getCompleteReplayImportMutationOptions = <TError = ApiError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof completeReplayImport>>, TError,CompleteReplayImportMutationVariables, TContext>, request?: SecondParameter<typeof apiFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof completeReplayImport>>, TError,CompleteReplayImportMutationVariables, TContext> => {
+
+const mutationKey = getCompleteReplayImportMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof completeReplayImport>>, CompleteReplayImportMutationVariables> = (props) => {
+          const {id} = props ?? {};
+
+          return  completeReplayImport(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CompleteReplayImportMutationResult = NonNullable<Awaited<ReturnType<typeof completeReplayImport>>>
+
+    export type CompleteReplayImportMutationError = ApiError
+    export type CompleteReplayImportMutationVariables = {id: string}
+
+    export const useCompleteReplayImport = <TError = ApiError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof completeReplayImport>>, TError,CompleteReplayImportMutationVariables, TContext>, request?: SecondParameter<typeof apiFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof completeReplayImport>>,
+        TError,
+        CompleteReplayImportMutationVariables,
+        TContext
+      > => {
+      return useMutation(getCompleteReplayImportMutationOptions(options), queryClient);
     }
 

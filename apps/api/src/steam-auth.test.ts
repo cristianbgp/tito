@@ -1,6 +1,7 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { sql } from "drizzle-orm";
 import {
   afterAll,
   afterEach,
@@ -152,7 +153,11 @@ describe("Steam authentication with Better Auth", () => {
     const session = await auth.api.getSession({
       headers: new Headers({ Cookie: cookieHeader(response) }),
     });
-    expect(session?.user).toMatchObject({ steamId, name: "Steam Player" });
+    expect(session?.user).toMatchObject({
+      steamId,
+      name: "Steam Player",
+      isAdmin: false,
+    });
     const restored = createAuth(config, database.db);
     expect(
       (
@@ -161,11 +166,15 @@ describe("Steam authentication with Better Auth", () => {
         })
       )?.user.id,
     ).toBe(session?.user.id);
+    await database.db.execute(
+      sql`update "user" set is_admin = true where id = ${session!.user.id}`,
+    );
     const next = await complete(await begin(), steamId);
     const returning = await auth.api.getSession({
       headers: new Headers({ Cookie: cookieHeader(next) }),
     });
     expect(returning?.user.id).toBe(session?.user.id);
+    expect(returning?.user).toMatchObject({ isAdmin: true });
   });
 
   async function existingEmailAccount(email: string) {
